@@ -570,4 +570,7 @@ public class BalootSystem {
     public List<Commodity> filterByProviderNameSortByPrice(String keyword) {
         return commodityService.filterByProviderNameSortByPrice(keyword);
     }
+    public Set<String> getCommodityCategory(int commodityId) {
+        return commodityService.getCategoriesForCommodity(commodityId);
+    }
 }
