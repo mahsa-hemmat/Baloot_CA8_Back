@@ -94,7 +94,7 @@ public class CommodityController {
             CommodityInfo commodityInfo = new CommodityInfo(co);
             commodityInfo.setProviderName(balootSystem.getProvider(co.getProviderId()).getName());
             commodityInfo.setRatingsCount(co.getRatingCount());
-            System.out.println(commodityInfo.getRating());
+            commodityInfo.setCategories(balootSystem.getCommodityCategory(commodity_id));
             return ResponseEntity.status(HttpStatus.OK).body(commodityInfo);
         } catch (CommodityNotFoundException | ProviderNotFoundException ex) {
             System.out.println(ex.getMessage());
