@@ -35,9 +35,7 @@ public class UserController {
 
     @GetMapping("/buylist")
     public ResponseEntity<Object> getBuyList() {
-        if(!balootSystem.hasAnyUserLoggedIn()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
-        }
+
         try {
             List<List<Object>> results = balootSystem.getBuyList();
             List<CartCommodity> commodities = new ArrayList<>();
@@ -77,9 +75,6 @@ public class UserController {
 
     @DeleteMapping("/buylist")
     public ResponseEntity<Object> removeFromBuyList(@RequestParam(value = "commodityId") int commodityId) {
-        if(!balootSystem.hasAnyUserLoggedIn()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
-        }
         try {
             balootSystem.removeCommodityFromBuyList(commodityId);
             return ResponseEntity.status(HttpStatus.OK).body("Commodity is removed from buy list successfully.");
@@ -91,9 +86,6 @@ public class UserController {
 
     @GetMapping("/history")
     public ResponseEntity<Object> getHistory() {
-        if(!balootSystem.hasAnyUserLoggedIn()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
-        }
         try {
             List<List<Object>> results = balootSystem.getHistoryList();
             List<CartCommodity> commodities = new ArrayList<>();
@@ -112,8 +104,6 @@ public class UserController {
 
     @PostMapping("/credit")
     public ResponseEntity<Object> addCredit(@RequestParam(value = "credit") int credit) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             if (credit < 0) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Failed. Credit Cannot Be Negative");
@@ -144,8 +134,6 @@ public class UserController {
 
     @GetMapping ("/payment")
     public ResponseEntity<Object> setPaymentData() {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             int price = balootSystem.getTotalCost();
             return ResponseEntity.status(HttpStatus.OK).body(price);
@@ -157,8 +145,6 @@ public class UserController {
 
     @PostMapping("/payment")
     public ResponseEntity<Object> makePayment() {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             balootSystem.purchase();
             return ResponseEntity.status(HttpStatus.OK).body("payment done successfully.");
@@ -173,8 +159,6 @@ public class UserController {
 
     @PostMapping("/discount")
     public ResponseEntity<Object> applyDiscountCode(@RequestParam(value = "discountcode", required = false) String discount) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             int price = balootSystem.submitDiscount(discount);;
             return ResponseEntity.status(HttpStatus.OK).body(price);

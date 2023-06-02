@@ -21,8 +21,6 @@ public class CommentController {
 
     @PostMapping ("")
     public ResponseEntity<Object> addComment(@RequestBody AbstractCommentInfo commentInfo) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             balootSystem.addComment(commentInfo.getText(), commentInfo.getCommodityId());
             return ResponseEntity.status(HttpStatus.OK).body("Comment added successfully.");
@@ -35,8 +33,6 @@ public class CommentController {
     @PostMapping("/{commentId}")
     public ResponseEntity<Object> voteComment(@PathVariable(value = "commentId") Long commentId,
                                               @RequestParam(value = "vote") int vote) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             balootSystem.voteComment(commentId, vote);
             return ResponseEntity.status(HttpStatus.OK).body("vote added successfully.");

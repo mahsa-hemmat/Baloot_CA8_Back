@@ -61,4 +61,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Register Failed." + e.getMessage());
         }
     }
+
+    @PostMapping("/callback")
+    public ResponseEntity<Object> callback(@RequestBody String githubCode) {
+        try {
+            System.out.println("signed up successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("Registered successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Register Failed." + e.getMessage());
+        }
+    }
 }

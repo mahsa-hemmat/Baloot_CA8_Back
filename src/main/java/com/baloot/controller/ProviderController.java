@@ -23,8 +23,6 @@ public class ProviderController {
 
     @GetMapping("/{provider_id}")
     public ResponseEntity<Object> getProvider(@PathVariable int provider_id) throws Exception {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             Provider provider = balootSystem.getProvider(provider_id);
             ProviderInfo providerInfo = new ProviderInfo(provider);
@@ -38,8 +36,6 @@ public class ProviderController {
 
     @GetMapping("/{provider_id}/commodities")
     public ResponseEntity<Object> getProviderCommodities(@PathVariable int provider_id) throws ProviderNotFoundException {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             ArrayList<AbstractCommodityInfo> abstractCommodityInfos = new ArrayList<>();
             for(Commodity commodity : balootSystem.getProvider(provider_id).getCommodities()){

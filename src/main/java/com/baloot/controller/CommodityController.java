@@ -31,8 +31,6 @@ public class CommodityController {
     public ResponseEntity<Object> getCommodities(@RequestParam(value = "searchType", required=false) Integer searchType,
                                                  @RequestParam(value = "keyword", required=false) String keyword,
                                                  @RequestParam(value = "sortType", required=false) String sort) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         boolean emptySort = sort == null || sort.isBlank() || sort.isEmpty();
         boolean emptyKeyword = keyword == null || keyword.isBlank() || keyword.isEmpty();
         if (!emptySort && (!sort.equals("name")) && (!sort.equals("price"))) {
@@ -87,9 +85,7 @@ public class CommodityController {
     }
     @GetMapping("/{commodity_id}")
     public ResponseEntity<Object> getCommodity(@PathVariable int commodity_id) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
-        try {
+         try {
             Commodity co = balootSystem.getCommodity(commodity_id);
             CommodityInfo commodityInfo = new CommodityInfo(co);
             commodityInfo.setProviderName(balootSystem.getProvider(co.getProviderId()).getName());
@@ -103,8 +99,6 @@ public class CommodityController {
     }
     @GetMapping("/{commodity_id}/comments")
     public ResponseEntity<Object> getCommodityComments(@PathVariable int commodity_id) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             return ResponseEntity.status(HttpStatus.OK).body(balootSystem.getCommodityComments(commodity_id));
         } catch (CommodityNotFoundException ex) {
@@ -115,8 +109,6 @@ public class CommodityController {
 
     @GetMapping("/{commodity_id}/recommended")
     public ResponseEntity<Object> getRecommendedCommodities(@PathVariable int commodity_id) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             List<Commodity> recommended = balootSystem.recommenderSystem(commodity_id);
             ArrayList<AbstractCommodityInfo> abstractCommodityInfos = new ArrayList<>();
@@ -131,8 +123,6 @@ public class CommodityController {
     }
     @PostMapping("/{commodity_id}")
     public ResponseEntity<Object> rateCommodity(@PathVariable Integer commodity_id, @RequestParam(value = "score") int score) {
-        if (!balootSystem.hasAnyUserLoggedIn())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
         try {
             balootSystem.rateCommodity(commodity_id, score);
             return ResponseEntity.status(HttpStatus.OK).body("score added successfully.");
