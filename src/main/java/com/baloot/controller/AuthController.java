@@ -8,10 +8,7 @@ import com.baloot.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -62,10 +59,11 @@ public class AuthController {
     }
 
     @PostMapping("/callback")
-    public ResponseEntity<Object> callback(@RequestBody String githubCode) {
+    public ResponseEntity<Object> callback(@RequestParam("code") String githubCode) {
         try {
+            String jwt=authService.loginGithub(githubCode);
             System.out.println("signed up successfully");
-            return ResponseEntity.status(HttpStatus.OK).body("Registered successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("{ \"jwt\" :\""+jwt+"\"}");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Register Failed." + e.getMessage());

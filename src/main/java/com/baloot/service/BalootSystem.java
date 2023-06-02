@@ -579,4 +579,28 @@ public class BalootSystem {
     public void setUser(String name) {
         loggedInUser=name;
     }
+
+    public String setUpUser(String accessToken) throws Exception{
+        System.out.println(accessToken);
+        URL url = new URL("https://api.github.com/user");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer "+accessToken);
+        con.setRequestProperty("Accept", "application/vnd.github+json");
+        con.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+        System.out.println(content);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(content.toString());
+        User user = new User(jsonNode.get("login").asText(), "1234", jsonNode.get("email").asText(), jsonNode.get("created_at").asText(), jsonNode.get("location").asText(), 0);
+        this.addUser(user);
+        return user.getUsername();
+    }
 }

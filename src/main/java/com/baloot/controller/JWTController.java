@@ -28,18 +28,9 @@ import static java.lang.Thread.sleep;
 public class JWTController extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Enumeration<String> headerNames = request.getHeaderNames();
-
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                System.out.println("Header: " + request.getHeader(headerNames.nextElement()));
-            }
-        }
         String jwt = request.getHeader("authorization");
-        System.out.println(jwt);
         if(jwt == null) {
             response.sendError(403, "not Logged In");
-            System.out.println("whyyyyyy");
             return;
         }
         if(!jwt.equals("null")){
