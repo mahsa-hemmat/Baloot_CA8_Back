@@ -55,7 +55,7 @@ public class JWTController extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        if (path.contains("/auth") || "OPTIONS".equals(request.getMethod())) {
+        if ((!path.contains("/commodities")&&!path.contains("/user")&&!path.contains("/providers")&&!path.contains("/comment"))  || "OPTIONS".equals(request.getMethod())) {
             return true;
         }
         return false;

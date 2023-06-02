@@ -23,9 +23,9 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Object> getUser() {
+    public ResponseEntity<Object> getUser(@RequestAttribute("username") String name) {
         try {
-            UserInfo userInfo = new UserInfo(balootSystem.getLoggedInUser());
+            UserInfo userInfo = new UserInfo(balootSystem.getUser(name));
             return ResponseEntity.status(HttpStatus.OK).body(userInfo);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -34,10 +34,10 @@ public class UserController {
     }
 
     @GetMapping("/buylist")
-    public ResponseEntity<Object> getBuyList() {
+    public ResponseEntity<Object> getBuyList(@RequestAttribute("username") String name) {
 
         try {
-            List<List<Object>> results = balootSystem.getBuyList();
+            List<List<Object>> results = balootSystem.getBuyList(name);
             List<CartCommodity> commodities = new ArrayList<>();
             if(results==null)
                 return ResponseEntity.status(HttpStatus.OK).body(commodities);
@@ -54,11 +54,9 @@ public class UserController {
     }
 
     @PostMapping("/buylist")
-    public ResponseEntity<Object> addToBuyList(@RequestParam(value = "commodityId") int commodityId) {
-        if(!balootSystem.hasAnyUserLoggedIn()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in. Please login first");
-        }
+    public ResponseEntity<Object> addToBuyList(@RequestParam(value = "commodityId") int commodityId,@RequestAttribute("username") String name) {
         try {
+            balootSystem.setUser(name);
             balootSystem.addToBuyList(commodityId);
             return ResponseEntity.status(HttpStatus.OK).body("Commodity is added to buylist successfully.");
         } catch (OutOfStockException ex) {
@@ -85,8 +83,9 @@ public class UserController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<Object> getHistory() {
+    public ResponseEntity<Object> getHistory(@RequestAttribute("username") String name) {
         try {
+            balootSystem.setUser(name);
             List<List<Object>> results = balootSystem.getHistoryList();
             List<CartCommodity> commodities = new ArrayList<>();
             if(results==null)
@@ -103,7 +102,8 @@ public class UserController {
     }
 
     @PostMapping("/credit")
-    public ResponseEntity<Object> addCredit(@RequestParam(value = "credit") int credit) {
+    public ResponseEntity<Object> addCredit(@RequestParam(value = "credit") int credit,@RequestAttribute("username") String name) {
+        balootSystem.setUser(name);
         try {
             if (credit < 0) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Failed. Credit Cannot Be Negative");
@@ -118,7 +118,8 @@ public class UserController {
 
     @PutMapping ("/buylist")
     public ResponseEntity<Object> setPaymentDataFotBuyList(@RequestParam(value = "commodityId") int commodityId,
-                                                 @RequestParam(value = "quantity") int quantity) {
+                                                 @RequestParam(value = "quantity") int quantity,@RequestAttribute("username") String name) {
+        balootSystem.setUser(name);
         try {
             User user = balootSystem.getLoggedInUser();
             balootSystem.updateQuantity(user, commodityId, quantity);
@@ -133,7 +134,8 @@ public class UserController {
     }
 
     @GetMapping ("/payment")
-    public ResponseEntity<Object> setPaymentData() {
+    public ResponseEntity<Object> setPaymentData(@RequestAttribute("username") String name) {
+        balootSystem.setUser(name);
         try {
             int price = balootSystem.getTotalCost();
             return ResponseEntity.status(HttpStatus.OK).body(price);
@@ -144,7 +146,8 @@ public class UserController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<Object> makePayment() {
+    public ResponseEntity<Object> makePayment(@RequestAttribute("username") String name) {
+        balootSystem.setUser(name);
         try {
             balootSystem.purchase();
             return ResponseEntity.status(HttpStatus.OK).body("payment done successfully.");
@@ -158,7 +161,8 @@ public class UserController {
     }
 
     @PostMapping("/discount")
-    public ResponseEntity<Object> applyDiscountCode(@RequestParam(value = "discountcode", required = false) String discount) {
+    public ResponseEntity<Object> applyDiscountCode(@RequestParam(value = "discountcode", required = false) String discount,@RequestAttribute("username") String name) {
+        balootSystem.setUser(name);
         try {
             int price = balootSystem.submitDiscount(discount);;
             return ResponseEntity.status(HttpStatus.OK).body(price);

@@ -369,8 +369,8 @@ public class BalootSystem {
         return results;
     }
 
-    public List<List<Object>> getBuyList() throws UserNotFoundException {
-        User user = userService.findUserById(loggedInUser);
+    public List<List<Object>> getBuyList(String username) throws UserNotFoundException {
+        User user = userService.findUserById(username);
         List<List<Object>> results = buyListService.getUserCommodities(user);
         if(results.isEmpty())
             return null;
@@ -574,5 +574,9 @@ public class BalootSystem {
     }
     public Set<String> getCommodityCategory(int commodityId) {
         return commodityService.getCategoriesForCommodity(commodityId);
+    }
+
+    public void setUser(String name) {
+        loggedInUser=name;
     }
 }
