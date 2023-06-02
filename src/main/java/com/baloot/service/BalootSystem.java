@@ -288,6 +288,8 @@ public class BalootSystem {
     }
     public void loginInUser(String username, String password) throws UserNotFoundException {
         User user = userService.findUserById(username);
+        System.out.println(user.getPassword());
+        System.out.println(Arrays.toString(getHash(password)));
         if (user.getPassword().equals(Arrays.toString(getHash(password)))) {
             loggedInUser = user.getUsername();
         }

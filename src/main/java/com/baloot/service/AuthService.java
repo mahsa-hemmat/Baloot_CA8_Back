@@ -17,14 +17,16 @@ public class AuthService {
         this.balootSystem = balootSystem;
     }
 
-    public  void authenticateUser(LoginInfo login) throws InValidInputException, UserNotFoundException {
+    public  String authenticateUser(LoginInfo login) throws InValidInputException, UserNotFoundException {
         if (login.getUsername() == null)
             throw new InValidInputException("Username field cannot be empty");
         String name = login.getUsername();
         String password = login.getPassword();
+        System.out.println(balootSystem.isUserValid(name));
         if (balootSystem.isUserValid(name))
             balootSystem.loginInUser(name, password);
         System.out.println(balootSystem.getLoggedInUser().getUsername() + " logged in");
+        return JWTService.getInstance().createJWT(login.getUsername());
     }
 
     public void logoutUser() throws Exception {

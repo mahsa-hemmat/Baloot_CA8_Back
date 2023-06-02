@@ -29,8 +29,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginInfo loginData) throws UserNotFoundException, InValidInputException {
         try {
-            authService.authenticateUser(loginData);
-            return ResponseEntity.status(HttpStatus.OK).body("logged in successfully");
+            String jwt=authService.authenticateUser(loginData);
+            return ResponseEntity.status(HttpStatus.OK).body("{ \"jwt\" :\""+jwt+"\"}");
         } catch (UserNotFoundException e){
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

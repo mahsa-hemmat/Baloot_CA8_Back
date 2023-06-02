@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 @WebFilter(urlPatterns ={
+        "/commodity"
 })
 public class JWTController extends OncePerRequestFilter {
     @Override
