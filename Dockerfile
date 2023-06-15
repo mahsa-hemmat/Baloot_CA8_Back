@@ -20,7 +20,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # commands
 # docker network create baloot-network
-# docker run --name mysql-container --network baloot-network -e MYSQL_ROOT_PASSWORD=root_1234 -e MYSQL_USER=db -e MYSQL_PASSWORD=root_1234 -e MYSQL_DATABASE=balootdb -d mysql:8.0.33
+# docker run --name mysql-container --network baloot-network -e MYSQL_ROOT_PASSWORD=root_1234 -e MYSQL_DATABASE=balootdb -d mysql:8.0.33
 # docker build -t back .
 # docker run --network baloot-network --name baloot-container -p 8080:8080 -d back
 
