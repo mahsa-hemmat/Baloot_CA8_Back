@@ -87,7 +87,7 @@ public class BalootSystem {
     private EntityManager entityManager;
 
     public boolean areTablesCreated() {
-        Query query = entityManager.createNativeQuery("SELECT 1 FROM baloot.user LIMIT 1");
+        Query query = entityManager.createNativeQuery("SELECT 1 FROM balootdb.user LIMIT 1");
         return query.getResultList().size() > 0;
     }
 
